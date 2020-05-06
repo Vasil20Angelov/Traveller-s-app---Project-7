@@ -26,6 +26,7 @@ public:
 	void addnewtour(const string destination, Date aDate, Date dDate, short grade, const string comment, int photos_num); // Добавя нова екскурзия към акаунта
 	void addPhotos(int index, const string photo); // Добавя снимки за дадена екскурзия
 	void addNewFriends(const string friends_name); // Добавя нови приятели
+	void ShowPersonalData() const;
 
 	const string getNickname() const;
 	const string getPassword() const;

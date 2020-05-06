@@ -16,8 +16,8 @@ public:
 
 	void LoadData(ifstream& in);
 	void SavaData(ofstream& out) const;
-	//void PhotosMemory(int photosNum);
 	void AddPhotos(int index, const string photos);
+	void ShowTour() const;
 	const string getdest() const;
 
 private:

@@ -163,7 +163,7 @@ void System::Addtour(User& cur_user, int& destNumber)
 	} while (!isOk);
 
 	cout << "\nYour comment for the destination (up to 100 symbols): " << endl;
-	cin >> comment;
+	getline(cin, comment);
 
 	cout << "\nHow many pictures you want to add: ";
 	cin >> photosNumber;
@@ -318,7 +318,8 @@ int System::run()
 			Done = true;
 			cout << "1. Sign in" << endl;
 			cout << "2. Sign up" << endl;
-			cout << "3. Exit" << endl;
+			cout << "0. Exit" << endl;
+			cout << ">> ";
 			cin >> option;
 
 			switch (option)
@@ -358,12 +359,12 @@ int System::run()
 					cout << "Error! Couldn't open the file!" << endl;
 					return 0;
 				}
-				pAcc.write((const char*)&cur_user.FriendsCount, sizeof(int));
-				pAcc.write((const char*)&cur_user.ToursCount, sizeof(int));
+				//pAcc.write((const char*)&cur_user.FriendsCount, sizeof(int));
+				//pAcc.write((const char*)&cur_user.ToursCount, sizeof(int));
 				pAcc.close();
 				break;
 			}
-			case 3:
+			case 0:
 			{
 				cout << "Exiting the program..." << endl;
 				return 0;
@@ -386,6 +387,8 @@ int System::run()
 		cout << "3. All destinations" << endl;
 		cout << "4. Add a friend" << endl;
 		cout << "5. Check your friends' list" << endl;
+		cout << "0. Exit" << endl;
+		cout << ">> ";
 		cin >> option;
 		switch (option)
 		{
@@ -420,12 +423,17 @@ int System::run()
 		}
 		case 2:
 		{
-
+			cur_user.ShowPersonalData();
 			break;
 		}
 		case 3:
 		{
-
+			cout << "\nAll destinations:" << endl;
+			for (int i = 0; i < destNumber; i++)
+			{
+				cout << i + 1 << ". " << destlist[i] << endl;;
+			}
+			cout << endl;
 			break;
 		}
 		case 4:
@@ -440,7 +448,7 @@ int System::run()
 		}
 		case 0:
 		{
-			cout << "Exiting the program" << endl;
+			cout << "Exiting the program..." << endl;
 			break;			
 		}
 		default:
@@ -451,6 +459,9 @@ int System::run()
 		}
 
 	} while (option != 0);
+
+	//delete[] users;
+	//delete[] destlist;
 
 	return 0;
 }

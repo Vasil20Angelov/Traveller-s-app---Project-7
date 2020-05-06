@@ -132,6 +132,16 @@ void User::addNewFriends(const string friends_name)
 	//FriendsCount++;
 }
 
+void User::ShowPersonalData() const
+{
+	cout << nickname << "'s Tours" << endl;
+	for (int i = 0; i < ToursCount; i++)
+	{
+		cout << i + 1 << ". ";
+		tours[i].ShowTour();
+	}
+}
+
 const string User::getNickname() const
 {
 	return nickname;

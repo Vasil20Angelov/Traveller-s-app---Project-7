@@ -114,6 +114,21 @@ void Tour::AddPhotos(int index, const string photo)
 	
 }
 
+void Tour::ShowTour() const
+{
+	cout << "Destination: " << destination << endl;
+	cout << "Arrival date: ";
+	aDate.ShowDate();
+	cout << "Departure date: ";
+	dDate.ShowDate();
+	cout << "Your grade about the destination: " << grade << " of 5" << endl;
+	cout << "Comment: " << comment << endl;
+	cout << "Your photos: " << endl;
+	for (int i = 0; i < photos_num; i++)
+		cout << photos[i] << endl;
+	cout << endl;
+}
+
 const string Tour::getdest() const
 {
 	return destination;
