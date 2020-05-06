@@ -264,6 +264,7 @@ int System::run()
 	{
 		DestRead.seekg(0, ios::beg);
 		DestRead.read((char*)&destNumber, sizeof(int));
+		destlist = new DestinationsList[destNumber];
 		for (int i = 0; i < destNumber; i++)
 		{
 			destlist[i].LoadData(DestRead);
@@ -304,6 +305,7 @@ int System::run()
 	{
 		UsersDataR.seekg(0, ios::beg);
 		UsersDataR.read((char*)&count, sizeof(int));
+		users = new User[count];
 		for (int i = 0; i < count; i++)
 		{
 			users[i].Users_Data(UsersDataR);
