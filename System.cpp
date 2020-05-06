@@ -164,7 +164,7 @@ void System::Addtour(User& cur_user, int& destNumber)
 
 	cout << "\nYour comment for the destination (up to 100 symbols): " << endl;
 	getline(cin, comment);
-
+	
 	cout << "\nHow many pictures you want to add: ";
 	cin >> photosNumber;
 	if (photosNumber < 0)
