@@ -8,5 +8,6 @@ public:
 	short year;
 	
 	bool DateValidation();
+	bool DataComparison(const Date& other);
 	void ShowDate() const;
 };
