@@ -21,19 +21,24 @@ System& System::i()
 User System::signUp(int& count, ofstream& out)
 {
 	string name, password, email;
-	cout << "Sign Up" << endl;
+	cout << "\nSigning Up" << endl;
 	bool IsOk = true;
 	do {
 
 		IsOk = true;
 		cout << "Enter nickname: ";
 		cin >> name;
-		for (int i = 0; i < count; i++)
+		if (!NameValidation(name))
+			IsOk = false;
+		else
 		{
-			if (name.compare(this->users[i].getNickname()) == 0)
+			for (int i = 0; i < count; i++)
 			{
-				cout << "There is a user with that name already!" << endl;
-				IsOk = false;
+				if (name.compare(this->users[i].getNickname()) == 0)
+				{
+					cout << "There is a user with that name already!" << endl;
+					IsOk = false;
+				}
 			}
 		}
 
@@ -87,6 +92,7 @@ User System::signUp(int& count, ofstream& out)
 
 int System::signIn(int count)
 {
+	cout << "\nSigning in" << endl;
 	string name, password;
 	cout << "Enter nickname: ";
 	cin >> name;
@@ -105,11 +111,37 @@ int System::signIn(int count)
 	return -1;
 }
 
+bool System::NameValidation(const string name)
+{
+	int index = 0;
+	while (name[index] != '\0')
+	{
+		if (name[index] < 'A' && name[index] > 'Z')
+		{
+			if (name[index] < 'a' && name[index] > 'z')
+			{
+				if (name[index] < '0' && name[index] > '9')
+				{
+					cout << "Invalid nickname! It can contain only letters a-Z or numbers 0-9." << endl;
+					return false;
+				}
+			}
+		}
+		index++;
+	}
+
+	return true;
+}
+
 bool System::PhotoValidation(string photo)
 {
 	int index = 0;
 	if (photo[index] == '.')
+	{
+		cout << "The photos must be in format name.jpeg or name.png!" << endl;
 		return false;
+	}
+		
 
 	while (photo[index]!='\0')
 	{
@@ -130,7 +162,38 @@ bool System::PhotoValidation(string photo)
 		index++;
 
 	}
+	
+	cout << "The photo must be in format name.jpeg or name.png" << endl;
 	return false;
+}
+
+bool System::addFriend(User& cur_user, const int count)
+{
+	string nickname;
+	cout << "Enter user's nickname to add him in your friends' list" << endl;
+	cout << "Nickname: ";
+	cin >> nickname;
+	if (nickname.compare(cur_user.getNickname()) == 0)
+	{
+		cout << "You cannot add yourself as a friend!" << endl;
+		return false;
+	}
+
+	for (int i = 0; i < count; i++)
+	{
+		if (nickname.compare(users[i].getNickname()) == 0)
+		{
+			if (cur_user.CheckifAdded(nickname))
+				return false;
+
+			cur_user.addNewFriends(users[i].getNickname());
+			return true;
+		}
+	}
+
+	cout << "No user with that nickname has been found in the system!" << endl;
+	return false;
+	
 }
 
 void System::Addtour(User& cur_user, int& destNumber)
@@ -138,17 +201,23 @@ void System::Addtour(User& cur_user, int& destNumber)
 	string destination, comment, photo;
 	int grade, photosNumber;
 	Date aDate, dDate;
-
-	cout << "Destination: " << endl;
+	
+	cout << "\nDestination: " << endl;
 	cin >> destination;
 
 	cout << "\nEnter arrival date" << endl;
-	cin >> aDate.year >> aDate.month >> aDate.day;
+	aDate.EnterDate();
 
 	cout << "\nEnter departure date" << endl;
-	cin >> dDate.year >> dDate.month >> dDate.day;
-
 	bool isOk = true;
+	do
+	{
+		isOk = true;
+		dDate.EnterDate();
+		if (!dDate.DataComparison(aDate))
+			isOk = false;
+	} while (!isOk);
+	
 	do
 	{
 		isOk = true;
@@ -163,6 +232,7 @@ void System::Addtour(User& cur_user, int& destNumber)
 	} while (!isOk);
 
 	cout << "\nYour comment for the destination (up to 100 symbols): " << endl;
+	cin.ignore();
 	getline(cin, comment);
 	
 	cout << "\nHow many pictures you want to add: ";
@@ -235,47 +305,45 @@ int System::run()
 	Date Adate, Ddate;
 	int photonum, option, destNumber, count = 0;
 	short grade;
+
 	ofstream UsersData(database, ios::binary | ios::app);
 	if (!UsersData)
 	{
 		cout << "Error! Couldn't open the file!" << endl;
-		return 0;
+		return -1;
 	}
 	UsersData.close();
 	ofstream Dest(dlist, ios::binary | ios::app);
 	if (!Dest)
 	{
 		cout << "Error! Couldn't open the file!" << endl;
-		return 0;
+		return -1;
 	}
 	Dest.close();
 	ifstream DestRead(dlist, ios::binary);
 	if (!DestRead)
 	{
 		cout << "Error! Couldn't open the file!" << endl;
-		return 0;
+		return -1;
 	}
 	DestRead.seekg(0, ios::end);
 	if (DestRead.tellg() == 0)
-	{
 		destNumber = 0;
-	}
 	else
 	{
 		DestRead.seekg(0, ios::beg);
 		DestRead.read((char*)&destNumber, sizeof(int));
 		destlist = new DestinationsList[destNumber];
 		for (int i = 0; i < destNumber; i++)
-		{
 			destlist[i].LoadData(DestRead);
-		}
 	}
 	DestRead.close();
+
 	ifstream UsersDataR(database, ios::binary);
 	if (!UsersData)
 	{
 		cout << "Error! Couldn't open the file!" << endl;
-		return 0;
+		return -1;
 	}
 	UsersDataR.seekg(0, ios::end);
 	if (UsersDataR.tellg() == 0)
@@ -285,7 +353,7 @@ int System::run()
 		if (!UsersData)
 		{
 			cout << "Error! Couldn't open the file!" << endl;
-			return 0;
+			return -1;
 		}
 		cur_user = signUp(count, UsersData);
 		UsersData.close();
@@ -295,10 +363,9 @@ int System::run()
 		if (!pAcc)
 		{
 			cout << "Error! Couldn't open the file!" << endl;
-			return 0;
+			return -1;
 		}
-		//pAcc.write((const char*)&cur_user.FriendsCount, sizeof(int));
-		//pAcc.write((const char*)&cur_user.ToursCount, sizeof(int));
+
 		pAcc.close();
 	}
 	else
@@ -335,9 +402,12 @@ int System::run()
 					if (!pAccRead)
 					{
 						cout << "Error! Couldn't open the file!" << endl;
-						return 0;
+						return -1;
 					}
 					cur_user.LoadAccInfo(pAccRead);
+					pAccRead.close();
+
+					cout << "Successfully loaded account information!" << endl;
 				}
 				else
 					Done = false;
@@ -353,15 +423,16 @@ int System::run()
 					return 0;
 				}
 				cur_user = signUp(count, UsersData);
+				personal_acc = cur_user.getNickname() + ".bin";
 				ofstream pAcc(personal_acc, ios::binary);
 				if (!pAcc)
 				{
 					cout << "Error! Couldn't open the file!" << endl;
 					return 0;
 				}
-				//pAcc.write((const char*)&cur_user.FriendsCount, sizeof(int));
-				//pAcc.write((const char*)&cur_user.ToursCount, sizeof(int));
 				pAcc.close();
+
+				cout << "Successfully created an account!" << endl;
 				break;
 			}
 			case 0:
@@ -382,14 +453,16 @@ int System::run()
 
 	do
 	{
+		cout << "\nMain menu" << endl;
 		cout << "1. Add new tour" << endl;
 		cout << "2. Check your tours" << endl;
 		cout << "3. All destinations" << endl;
-		cout << "4. Add a friend" << endl;
+		cout << "4. Add a new friend" << endl;
 		cout << "5. Check your friends' list" << endl;
 		cout << "0. Exit" << endl;
 		cout << ">> ";
 		cin >> option;
+		cout << endl;
 		switch (option)
 		{
 		case 1:
@@ -438,12 +511,23 @@ int System::run()
 		}
 		case 4:
 		{
-
+			if (addFriend(cur_user, count))
+			{
+				ofstream pAcc(personal_acc, ios::binary);
+				if (!pAcc)
+				{
+					cout << "Error! Couldn't open the file!" << endl;
+					return -1;
+				}
+				cur_user.SaveAccInfo(pAcc);
+				cout << "You have successfully added a user to your friend's list!" << endl;
+				pAcc.close();
+			}
 			break;
 		}
 		case 5:
 		{
-
+			cur_user.ShowFriendsList();
 			break;
 		}
 		case 0:
@@ -459,9 +543,6 @@ int System::run()
 		}
 
 	} while (option != 0);
-
-	//delete[] users;
-	//delete[] destlist;
 
 	return 0;
 }

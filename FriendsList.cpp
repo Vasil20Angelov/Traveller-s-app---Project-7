@@ -24,6 +24,17 @@ FriendsList::~FriendsList()
 	friends = nullptr;
 }
 
+bool FriendsList::AlreadyAdded(const string new_friend)
+{
+	for (int i = 0; i < friendsNum; i++)
+	{
+		if (new_friend.compare(friends[i]) == 0)
+			return true;
+	}
+
+	return false;
+}
+
 void FriendsList::addFriend(const string new_friend)
 {
 	if (friendsNum > 0)
@@ -70,6 +81,17 @@ void FriendsList::SaveData(ofstream& out) const
 		size_t size = friends[i].size();
 		out.write((const char*)&size, sizeof(size_t));
 		out.write((const char*)&friends[i][0], size);
+	}
+}
+
+void FriendsList::ShowFriends() const
+{
+	if (friendsNum == 0)
+		cout << "You don't have any friends" << endl;
+	else
+	{
+		for (int i = 0; i < friendsNum; i++)
+			cout << friends[i] << endl;
 	}
 }
 

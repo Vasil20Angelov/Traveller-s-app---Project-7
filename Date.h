@@ -9,5 +9,6 @@ public:
 	
 	bool DateValidation();
 	bool DataComparison(const Date& other);
+	void EnterDate();
 	void ShowDate() const;
 };

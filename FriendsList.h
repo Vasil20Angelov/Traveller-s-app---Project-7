@@ -10,9 +10,11 @@ public:
 	FriendsList(int friendsNum);
 	~FriendsList();
 
+	bool AlreadyAdded(const string new_friend);
 	void addFriend(const string new_friend);
 	void ReadData(ifstream& in);
 	void SaveData(ofstream& out) const;
+	void ShowFriends() const;
 
 private:
 

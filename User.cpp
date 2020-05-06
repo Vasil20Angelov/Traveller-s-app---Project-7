@@ -128,18 +128,38 @@ void User::addPhotos(int index, const string photo)
 void User::addNewFriends(const string friends_name)
 {
 	friends.addFriend(friends_name);
-
-	//FriendsCount++;
 }
 
 void User::ShowPersonalData() const
 {
 	cout << nickname << "'s Tours" << endl;
-	for (int i = 0; i < ToursCount; i++)
+
+	if (ToursCount == 0)
+		cout << "There haven't been added any tours in your account yet!" << endl;
+	else
 	{
-		cout << i + 1 << ". ";
-		tours[i].ShowTour();
+		for (int i = 0; i < ToursCount; i++)
+		{
+			cout << i + 1 << ". ";
+			tours[i].ShowTour();
+		}
 	}
+}
+
+void User::ShowFriendsList() const
+{
+	cout << "\nYour friends: " << endl;
+	friends.ShowFriends();
+}
+
+bool User::CheckifAdded(const string friends_name)
+{
+	if (friends.AlreadyAdded(friends_name))
+	{
+		cout << "You have already added this user to your friends' list. He cannot be added again." << endl;
+		return true;
+	}
+	return false;
 }
 
 const string User::getNickname() const
@@ -171,5 +191,4 @@ void User::clear()
 {
 	if (ToursCount > 0)
 		delete[] tours;
-
 }
