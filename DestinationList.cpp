@@ -179,12 +179,23 @@ void DestinationsList::addReview(const string user, const string comment, short 
 
 void DestinationsList::ShowReviews() const
 {
-	cout << "Reviews for " << destination << endl;
 
 	for (int i = 0; i < reviews; i++)
 	{
-		cout << endl << "User: " << user[i] << "  Grade: " << grade[i] << endl << comment[i] << endl;
+		cout << "User: " << user[i] << ",  Grade: " << grade[i] << endl << comment[i] << endl;
 	}
+}
+
+void DestinationsList::User_Tour(const string user) const
+{
+	for (int i = 0; i < reviews; i++)
+	{
+		if (user.compare(this->user[i]) == 0)
+		{
+			cout << "Destination: " << destination << ", Grade: " << grade[i] << endl;
+		}
+	}
+
 }
 
 const string DestinationsList::getDestination() const
@@ -237,5 +248,5 @@ void DestinationsList::clear()
 
 ostream& operator<<(ostream& out, const DestinationsList& obj)
 {
-	return out << "Destination: " << obj.destination << ", Grade: " << obj.avr_grade;
+	return out << "Destination: " << obj.destination << ", Grade: " << obj.avr_grade << endl;
 }

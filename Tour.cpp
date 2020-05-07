@@ -3,7 +3,6 @@
 #include <fstream>
 #include "Tour.h"
 
-//bool Tour::photoMem = false;
 Tour::Tour()
 {
 	destination = "";
@@ -36,7 +35,9 @@ Tour::Tour(const string& destination, Date aDate, Date dDate, short grade, const
 	this->photos_num = photos_num;
 	this->photos = new string [photos_num];
 	for (int i = 0; i < photos_num; i++)
-		this->photos[i] = "";
+	{
+		this->photos[i] = "";		
+	}
 }
 
 Tour::Tour(const Tour& other)
@@ -123,9 +124,8 @@ void Tour::ShowTour() const
 	dDate.ShowDate();
 	cout << "Your grade about the destination: " << grade << " of 5" << endl;
 	cout << "Comment: " << comment << endl;
-	cout << "Your photos: " << endl;
 	for (int i = 0; i < photos_num; i++)
-		cout << photos[i] << endl;
+		cout << "Photo " << i + 1 << ": " << photos[i] << endl;
 	cout << endl;
 }
 
@@ -144,10 +144,9 @@ void Tour::copy(const Tour& other)
 	grade = other.grade;
 
 	photos_num = other.photos_num;
-	if (photos_num > 0)
-		photos = new string[photos_num];
-	else
-		photos = nullptr;
+	photos = new string[photos_num];
+	for (int i = 0; i < photos_num; i++)
+		photos[i] = other.photos[i];
 
 }
 

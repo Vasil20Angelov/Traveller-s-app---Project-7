@@ -113,5 +113,11 @@ void Date::EnterDate()
 
 void Date::ShowDate() const
 {
-	cout << year << "." << month << "." << day << endl;
+	cout << year << ".";
+	if (month < 10)
+		cout << 0;
+	cout << month << ".";
+	if (day < 10)
+		cout << 0;
+	cout << day << endl;
 }

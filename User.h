@@ -27,12 +27,13 @@ public:
 	void addPhotos(int index, const string photo); // Добавя снимки за дадена екскурзия
 	void addNewFriends(const string friends_name); // Добавя нови приятели
 	void ShowPersonalData() const;
-	void ShowFriendsList() const;
 	bool CheckifAdded(const string friends_name);
 
 	const string getNickname() const;
 	const string getPassword() const;
 	const string getEmail() const;
+	const int getFriendsCount() const;
+	const string ShowFriendsList(int index) const;
 
 private:
 	void copy(const User& other);

@@ -7,7 +7,7 @@ using namespace std;
 class Tour
 {
 public:
-	//static bool photoMem;
+
 	Tour();
 	Tour(const string& destination, Date aDate, Date dDate, short grade, const string& comment, int photos_num);
 	Tour(const Tour& other);

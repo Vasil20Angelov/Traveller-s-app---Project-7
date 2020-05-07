@@ -21,6 +21,7 @@ public:
 
 	void addReview(const string user, const string comment, short grade);
 	void ShowReviews() const;
+	void User_Tour(const string user) const;
 	const string getDestination() const;
 
 	friend ostream& operator<<(ostream& out, const DestinationsList& obj);

@@ -84,15 +84,14 @@ void FriendsList::SaveData(ofstream& out) const
 	}
 }
 
-void FriendsList::ShowFriends() const
+const string FriendsList::ShowFriends(int index) const
 {
-	if (friendsNum == 0)
-		cout << "You don't have any friends" << endl;
-	else
-	{
-		for (int i = 0; i < friendsNum; i++)
-			cout << friends[i] << endl;
-	}
+	return friends[index];
+}
+
+const int FriendsList::getFriendsNum() const
+{
+	return friendsNum;
 }
 
 

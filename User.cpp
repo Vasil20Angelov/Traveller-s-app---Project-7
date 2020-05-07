@@ -146,10 +146,9 @@ void User::ShowPersonalData() const
 	}
 }
 
-void User::ShowFriendsList() const
+const string User::ShowFriendsList(int index) const
 {
-	cout << "\nYour friends: " << endl;
-	friends.ShowFriends();
+	return friends.ShowFriends(index);
 }
 
 bool User::CheckifAdded(const string friends_name)
@@ -175,6 +174,11 @@ const string User::getPassword() const
 const string User::getEmail() const
 {
 	return email;
+}
+
+const int User::getFriendsCount() const
+{
+	return friends.getFriendsNum();
 }
 
 void User::copy(const User& other)

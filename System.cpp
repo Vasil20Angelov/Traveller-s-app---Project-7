@@ -21,7 +21,7 @@ System& System::i()
 User System::signUp(int& count, ofstream& out)
 {
 	string name, password, email;
-	cout << "\nSigning Up" << endl;
+	cout << "Signing Up" << endl;
 	bool IsOk = true;
 	do {
 
@@ -90,9 +90,9 @@ User System::signUp(int& count, ofstream& out)
 	return users[count - 1];
 }
 
-int System::signIn(int count)
+int System::signIn(const int count)
 {
-	cout << "\nSigning in" << endl;
+	cout << "Signing in" << endl;
 	string name, password;
 	cout << "Enter nickname: ";
 	cin >> name;
@@ -116,11 +116,11 @@ bool System::NameValidation(const string name)
 	int index = 0;
 	while (name[index] != '\0')
 	{
-		if (name[index] < 'A' && name[index] > 'Z')
+		if (name[index] < 'A' || name[index] > 'Z')
 		{
-			if (name[index] < 'a' && name[index] > 'z')
+			if (name[index] < 'a' || name[index] > 'z')
 			{
-				if (name[index] < '0' && name[index] > '9')
+				if (name[index] < '0' || name[index] > '9')
 				{
 					cout << "Invalid nickname! It can contain only letters a-Z or numbers 0-9." << endl;
 					return false;
@@ -133,7 +133,7 @@ bool System::NameValidation(const string name)
 	return true;
 }
 
-bool System::PhotoValidation(string photo)
+bool System::PhotoValidation(const string photo)
 {
 	int index = 0;
 	if (photo[index] == '.')
@@ -198,12 +198,14 @@ bool System::addFriend(User& cur_user, const int count)
 
 void System::Addtour(User& cur_user, int& destNumber)
 {
-	string destination, comment, photo;
+	string destination, comment;
+	string photo;
 	int grade, photosNumber;
 	Date aDate, dDate;
 	
 	cout << "\nDestination: " << endl;
-	cin >> destination;
+	cin.ignore();
+	getline(cin, destination);
 
 	cout << "\nEnter arrival date" << endl;
 	aDate.EnterDate();
@@ -242,7 +244,6 @@ void System::Addtour(User& cur_user, int& destNumber)
 		cout << "You won't add any photos" << endl;
 		photosNumber = 0;
 	}
-
 	cur_user.addnewtour(destination, aDate, dDate, grade, comment, photosNumber);
 
 	for (int i = 0; i < photosNumber; i++)
@@ -258,6 +259,7 @@ void System::Addtour(User& cur_user, int& destNumber)
 		cur_user.addPhotos(i, photo);
 	}
 
+	
 	if (destNumber == 0)
 	{
 		destNumber++;
@@ -298,10 +300,32 @@ void System::Addtour(User& cur_user, int& destNumber)
 
 }
 
+void System::FriendsAndDestinations(const User& cur_user, const int destNumber)
+{
+	cout << "Friends' list and their tours" << endl;
+	string friends_name;
+	int friendsCount = cur_user.getFriendsCount();
+	if (friendsCount == 0)
+		cout << "You don't have friends" << endl;	
+	else
+	{
+		for (int i = 0; i < friendsCount; i++)
+		{
+			friends_name = cur_user.ShowFriendsList(i);
+			cout << i + 1 << ". " << friends_name << endl;
+			cout << "Visited destinations by the user: " << endl;
+			for (int j = 0; j < destNumber; j++)
+			{
+				destlist[j].User_Tour(friends_name);
+			}
+		}
+	}
+}
+
 int System::run()
 {
 	User cur_user;
-	string name, password, email, destination, comment, photo, fr, personal_acc;
+	string name, password, email, destination, comment, photo, personal_acc;
 	Date Adate, Ddate;
 	int photonum, option, destNumber, count = 0;
 	short grade;
@@ -388,7 +412,7 @@ int System::run()
 			cout << "0. Exit" << endl;
 			cout << ">> ";
 			cin >> option;
-
+			cout << endl;
 			switch (option)
 			{
 			case 1:
@@ -504,9 +528,10 @@ int System::run()
 			cout << "\nAll destinations:" << endl;
 			for (int i = 0; i < destNumber; i++)
 			{
-				cout << i + 1 << ". " << destlist[i] << endl;;
+				cout << i + 1 << ". " << destlist[i];
+				destlist[i].ShowReviews();
+				cout << endl;
 			}
-			cout << endl;
 			break;
 		}
 		case 4:
@@ -527,7 +552,7 @@ int System::run()
 		}
 		case 5:
 		{
-			cur_user.ShowFriendsList();
+			FriendsAndDestinations(cur_user, destNumber);
 			break;
 		}
 		case 0:

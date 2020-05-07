@@ -14,7 +14,8 @@ public:
 	void addFriend(const string new_friend);
 	void ReadData(ifstream& in);
 	void SaveData(ofstream& out) const;
-	void ShowFriends() const;
+	const string ShowFriends(int index) const;
+	const int getFriendsNum() const;
 
 private:
 
